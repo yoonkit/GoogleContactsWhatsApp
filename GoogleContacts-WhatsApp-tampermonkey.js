@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         WhatsApp link from phone numbers
+// @name         WhatsApp link in Google Contact phone numbers
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.4.1
 // @description  Adding a WhatsApp icon to Google Contacts phone numbers for a quick chat
 // @author       Yoon-Kit Yong
 // @donate       PayPal some love to yoonkit@gmail.com [ https://www.paypal.com/paypalme/yoonkit ]
@@ -14,45 +14,16 @@
 // ==/UserScript==
 
 
-//window.alert("hello 1");
-
-
 var $ = window.jQuery;
 
-(function () {
-    'use strict';
-
-    $(function () {
-        // handler for .ready()
-
-    });
-}) ();
 
 function ykAlert( msg, type=0 ) {
     if (type < 0) return type
     else if (type == 1) window.alert( msg )
     else console.log( msg );
     return 0;
-};
-
-function getTels() {
-        //ykAlert("getTels");
-
-
-        var tels = document.getElementsByClassName('urwqv');
-
-        for (let tel of tels) {
-            //ykAlert( tel );
-            let as = tel.getElementsByTagName('a');
-            if (as.length > 0) {
-                let a = as[0];
-                if (a.href.includes('tel:')) {
-                    alert(a.href)
-                }
-            };
-        return tels;
-        }
 }
+
 
 // https://icons8.com/icon/ChMMcyjCQnEn/whatsapp
 var whatsappICO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAACvklEQVR4nHVT204TURQdTUw0foDGNxN/wB/wT0yMD74TMdAO7QwXAeltZqpC6WWmUwgIRm4KCJSKtBYppSQgUmgVbGmxtQXamUJLYJlOYhPAruS8nLX3ys5aexPEBdQbrPdIE89QrHNbbXAcq/SOEs06dynW6ajT2+4T1UBR1FWNSdBrGKEw8ilwEo6l8UcqISufIJrMYvLLyinNibKWc/ZRFH/9UrOWFcbMPaNS4kDG/E4QrxftoGafQ+NuBuPvxHTUi1SuAGHYXdCyztA5kQZGaGRdw1IyLymNqintf5/Ba0Ystw/nsFvWskKv0lzbwd9uMAlyLJuHJSCg2dOOmagHTZ62qiKpfAE0K8qKJ6TeUdv7fq4QSKwrBYvxJZQxtTVTdZKZqA8T3tApxTptBP3S5Q2GdyCG3ihkOL2pCKynNqoKsP4uRJJZUKwYJyhW3I4kMjD5Xink0PqoItCz0ldVQOtuQUY+gdpgLxKNnCscjqXA+S0KSU7TiGR+IFvIom1OV/nTupsrAvRsK9L5Ikijo0DQZte4fzWCvtXhSkGLpx2JXBL5ooTBtXcI7oYglWR8CE8qfOeiHRu/UqA5MUqo9bbHXf3jufX0zrkxG2dbEYgHcYYz/MNWJqpwvl/LGJn9WiJNgp6oMQzcaDDyUjyTh3mh+3JsPg6Tm1OY3JxWou0K8Njdl6BhBJnUdd8lnlgs19RGx9He4RHa5ozomGeqmmddErGXl8G5RiSS4VuVRarT2R7obG8PD4qnSMtH+J07xrfUtuJJ2dhyOq6VQSwnN1Ce0iQMSTTrHCqvvyJAGvl2Thw5tQ5+zGkY4UhtcBQt/RP5hbUIyumU8w58/wnXmKegMfGS1sSTBHClcgcqg32UYsWBep3t4bMXtjtPdeLNug7boyazOE5zrs3yWdPmns8qnb1GxVhvXTzjv0Yqm3Pl1utJAAAAAElFTkSuQmCC";
@@ -115,7 +86,7 @@ function getPhoneDetails() {
 
                 tel.appendChild(span);
             }
-        };
+        }
     }
     return telsj;
 }
@@ -146,27 +117,3 @@ setInterval( function () { getPhoneDetails() }, 2000)
 setInterval( function () { getPhoneColumn() }, 2000)
 
 
-/*
-var jq = document.createElement('script');
-jq.onload = function() {
-    window.jQuery.noConflict();
-    console.log('jQuery loaded');
-    window.alert('onload');
-    setTimeout(Main, 3500);
-};
-
-jq.src = "//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js";
-document.getElementsByTagName('head')[0].appendChild(jq)
-
-function Main() {
-    //console.log("Loading WaMe");
-    window.alert("hello");
-};
-
-var tels = document.getElementsByClassName('urwqv');
-
-for (let tel in tels) {
-    window.alert( tel.getElementsByTagName('a') );
-}
-
-*/
