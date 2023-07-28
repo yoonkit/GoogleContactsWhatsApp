@@ -1,4 +1,5 @@
 # Google Contacts with WhatsApp links
+-- [Latest version at github](https://github.com/yoonkit/GoogleContactsWhatsApp) --
 
 ## Creates WhatsApp links within Google Contact Phone numbers using Tampermonkey
 
