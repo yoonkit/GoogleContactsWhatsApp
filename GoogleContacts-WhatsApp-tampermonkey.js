@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         WhatsApp link in Google Contact phone numbers
-// @namespace    http://tampermonkey.net/
-// @version      0.4.1
+// @name         WhatsApp links in Google Contact phone numbers
+// @namespace    https://github.com/yoonkit/GoogleContactsWhatsApp
+// @version      0.4.2
 // @description  Adding a WhatsApp icon to Google Contacts phone numbers for a quick chat
 // @author       Yoon-Kit Yong
 // @donate       PayPal some love to yoonkit@gmail.com [ https://www.paypal.com/paypalme/yoonkit ]
