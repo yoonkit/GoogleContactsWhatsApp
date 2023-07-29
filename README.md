@@ -12,12 +12,12 @@
 
 ## How to Install
 * Install the Tampermonkey extension for your browser -> [HERE](https://www.tampermonkey.net/)
+	* Mac and iPad: Safari using [Userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) 
+	* Microsoft: Edge needs its own [Tampermonkey](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd) installation.
 * Go to GreasyFork and "Install" this script -> [HERE](https://greasyfork.org/en/scripts/471933-whatsapp-link-in-google-contact-phone-numbers)
 * Check the installation is correct at Google Contacts -> [HERE](https://contacts.google.com/)
 * Works on: 
-	* Windows, Mac and Linux - Chrome, Brave, Firefox. 
-	* Mac: Safari using [Userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) 
-	* Microsoft Edge needs its own [Tampermonkey](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd) installation.
+	* Windows, Mac, iPad and Linux - Chrome, Brave, Firefox, Edge and Safari. 
 
 ## Note
 * Please make sure that when you enter in the Phone Numbers, the country codes are correct.
