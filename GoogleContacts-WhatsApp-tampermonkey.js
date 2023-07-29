@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WhatsApp links in Google Contact phone numbers
 // @namespace    https://github.com/yoonkit/GoogleContactsWhatsApp
-// @version      0.4.2
+// @version      0.4.3
 // @description  Adding a WhatsApp icon to Google Contacts phone numbers for a quick chat
 // @author       Yoon-Kit Yong
 // @donate       PayPal some love to yoonkit@gmail.com [ https://www.paypal.com/paypalme/yoonkit ]
@@ -14,10 +14,18 @@
 // ==/UserScript==
 
 
-var $ = window.jQuery;
+var $ = window.jQuery; // 230729 yky Watch out for Apple problems with jQuery
+var debug = -1; //230729 yky Set to -1 for production, 0 for debug
 
 
-function ykAlert( msg, type=0 ) {
+function ykAlert( msg, type=0 ) 
+{
+    /* Messages for debugging with varying degrees of reporting methods
+     *     -1 : Dont report
+     *      0 : console.log <Default>
+     *      1 : window.alert (very annoying)
+     * 230728 yky Created
+     */ 
     if (type < 0) return type
     else if (type == 1) window.alert( msg )
     else console.log( msg );
@@ -26,10 +34,19 @@ function ykAlert( msg, type=0 ) {
 
 
 // https://icons8.com/icon/ChMMcyjCQnEn/whatsapp
+// 230728 yky Small 16x16 icon for Whatsapp encoded inline. Detailed view is defaulted by css at 20x20 tho.
 var whatsappICO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAACvklEQVR4nHVT204TURQdTUw0foDGNxN/wB/wT0yMD74TMdAO7QwXAeltZqpC6WWmUwgIRm4KCJSKtBYppSQgUmgVbGmxtQXamUJLYJlOYhPAruS8nLX3ys5aexPEBdQbrPdIE89QrHNbbXAcq/SOEs06dynW6ajT2+4T1UBR1FWNSdBrGKEw8ilwEo6l8UcqISufIJrMYvLLyinNibKWc/ZRFH/9UrOWFcbMPaNS4kDG/E4QrxftoGafQ+NuBuPvxHTUi1SuAGHYXdCyztA5kQZGaGRdw1IyLymNqintf5/Ba0Ystw/nsFvWskKv0lzbwd9uMAlyLJuHJSCg2dOOmagHTZ62qiKpfAE0K8qKJ6TeUdv7fq4QSKwrBYvxJZQxtTVTdZKZqA8T3tApxTptBP3S5Q2GdyCG3ihkOL2pCKynNqoKsP4uRJJZUKwYJyhW3I4kMjD5Xink0PqoItCz0ldVQOtuQUY+gdpgLxKNnCscjqXA+S0KSU7TiGR+IFvIom1OV/nTupsrAvRsK9L5Ikijo0DQZte4fzWCvtXhSkGLpx2JXBL5ooTBtXcI7oYglWR8CE8qfOeiHRu/UqA5MUqo9bbHXf3jufX0zrkxG2dbEYgHcYYz/MNWJqpwvl/LGJn9WiJNgp6oMQzcaDDyUjyTh3mh+3JsPg6Tm1OY3JxWou0K8Njdl6BhBJnUdd8lnlgs19RGx9He4RHa5ozomGeqmmddErGXl8G5RiSS4VuVRarT2R7obG8PD4qnSMtH+J07xrfUtuJJ2dhyOq6VQSwnN1Ce0iQMSTTrHCqvvyJAGvl2Thw5tQ5+zGkY4UhtcBQt/RP5hbUIyumU8w58/wnXmKegMfGS1sSTBHClcgcqg32UYsWBep3t4bMXtjtPdeLNug7boyazOE5zrs3yWdPmns8qnb1GxVhvXTzjv0Yqm3Pl1utJAAAAAElFTkSuQmCC";
 
 function generateWhatsApp( phonetext )
 {
+    /* Creates the elements for a WhatsApp icon and url
+     *     link (url to wa.me)
+     *         icon (inline | alt text)
+     *     removes whitespaces and other symbols as wa.me only takes in full numbers
+     *     havent done anything for no country codes yet.
+     * 230728 yky Created
+     *     havent solved the overriding css for the bounding class as it defaults to wxh of 20px
+     */
     let phone = phonetext.replaceAll("+","");
     phone = phone.replaceAll(" ","");
     phone = phone.replaceAll("-","");
@@ -54,17 +71,31 @@ function generateWhatsApp( phonetext )
     return link;
 }
 
-function getPhoneDetails() {
-    var telsj = $("div.urwqv");
-    // ykAlert("getjTels found: " + telsj.length );
-
-    document.telsj = telsj;
+function getPhoneDetails() 
+{
+    /* Searches the Contact Details page for telephones to iconize
+     *     makes it look standard with the same spans and dots 
+     *         span
+     *             dot
+     *             icon
+     *     Gets the icon link from generateWhatsApp
+     * 230728 yky Created
+     *     setting the class is via setAttribute
+     *     if Google changes the classnames this will have to be updated
+     *         phone div: "urwqv"
+     *         span: "UvDwpb"
+     *         dot: "tZ08dd"
+     * 230729 yky Fixed for Safari - the jQuery doesnt return all Elements.
+     */
+    // var telsj = $("div.urwqv"); // 230729 yky Seems this doesnt work on Safari Mac and iPad. Need to use getElementsByClassName
+    var telsj = document.getElementsByClassName("urwqv"); 
+    ykAlert("getjTels found: " + telsj.length, debug );
+    //document.telsj = telsj;
 
     for (let tel of telsj)
     {
-        //ykAlert( tel );
         let as = tel.getElementsByTagName('a');
-        ykAlert( "as length: " + as.length, -1);
+        ykAlert( "as length: " + as.length, debug);
 
         if (as.length == 1)
         {
@@ -93,11 +124,16 @@ function getPhoneDetails() {
 
 function getPhoneColumn()
 {
+    /* Searches the entire Contact list for the Phone Number Column and attaches WhatsApp links
+     *     if the phone number length is more than 7
+     *     checks if it already has a link, it wont create another one.
+     * 230728 yky Created
+     */
     var phones = document.getElementsByClassName("b62A4e");
     for (let phone of phones)
     {
         let as = phone.getElementsByTagName('a');
-        if (as.length > 0) continue;
+        if (as.length > 0) continue; // 230728 yky Link already created
 
         let phonetext = phone.textContent;
         if (phonetext.length > 7)
@@ -112,8 +148,6 @@ function getPhoneColumn()
 //waitForKeyElements (".urwqv", getTels);
 
 // 230728 yky Using setTimeout instead of waitForKeyElements.
-//setTimeout( function () { getjTels() }, 3500)
 setInterval( function () { getPhoneDetails() }, 2000)
 setInterval( function () { getPhoneColumn() }, 2000)
-
-
+ykAlert("WhatsApp links for Google Contacts Loaded", 0)
