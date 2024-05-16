@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WhatsApp links in Google Contact phone numbers
 // @namespace    https://github.com/yoonkit/GoogleContactsWhatsApp
-// @version      0.4.3
+// @version      0.5
 // @description  Adding a WhatsApp icon to Google Contacts phone numbers for a quick chat
 // @author       Yoon-Kit Yong
 // @donate       PayPal some love to yoonkit@gmail.com [ https://www.paypal.com/paypalme/yoonkit ]
@@ -18,17 +18,34 @@ var $ = window.jQuery; // 230729 yky Watch out for Apple problems with jQuery
 var debug = -1; //230729 yky Set to -1 for production, 0 for debug
 
 
-function ykAlert( msg, type=0 ) 
+var verbosity = 3
+document.verbosity = verbosity
+
+function ykAlert( msg, type )
 {
     /* Messages for debugging with varying degrees of reporting methods
-     *     -1 : Dont report
+     *     -1 : Boldify
      *      0 : console.log <Default>
-     *      1 : window.alert (very annoying)
+     *      1 : light verbose
+     *      2 : medium verbose
+     *      3 : very verbose
+     *     10 : window.alert (very annoying)
      * 230728 yky Created
-     */ 
-    if (type < 0) return type
-    else if (type == 1) window.alert( msg )
-    else console.log( msg );
+	 * 230820 yky Modified - verbosity, caller function name, indent
+	 * 240502 yky Modified - caller crash on main call
+     */
+    if (type == null) type = 1
+    if (type < 0) console.log( '*** ' + msg + ' ***' )
+    else if (type == 10) window.alert( msg )
+    else if (type <= document.verbosity)
+    {
+        let fname = ""
+        let caller = null
+        if (ykAlert.hasOwnProperty("caller")) caller = ykAlert.caller
+        if (caller != null) fname = ' (' + caller.name + ') '
+        let spacer = "-".repeat(type*2) + ": "
+        console.log( spacer + msg + fname );
+    }
     return 0;
 }
 
@@ -89,13 +106,13 @@ function getPhoneDetails()
      */
     // var telsj = $("div.urwqv"); // 230729 yky Seems this doesnt work on Safari Mac and iPad. Need to use getElementsByClassName
     var telsj = document.getElementsByClassName("urwqv"); 
-    ykAlert("getjTels found: " + telsj.length, debug );
+    ykAlert("Phone details found: " + telsj.length, 2 );
     //document.telsj = telsj;
 
     for (let tel of telsj)
     {
         let as = tel.getElementsByTagName('a');
-        ykAlert( "as length: " + as.length, debug);
+        ykAlert( "as length: " + as.length, 4);
 
         if (as.length == 1)
         {
@@ -122,14 +139,29 @@ function getPhoneDetails()
     return telsj;
 }
 
+
+
 function getPhoneColumn()
 {
     /* Searches the entire Contact list for the Phone Number Column and attaches WhatsApp links
      *     if the phone number length is more than 7
      *     checks if it already has a link, it wont create another one.
      * 230728 yky Created
+	 * 240516 yky Modified - class "b62A4e" doesnt exist anymore. Using aria-describedby=phone-column
      */
-    var phones = document.getElementsByClassName("b62A4e");
+    // var phones = document.getElementsByClassName("b62A4e"); // 240516 yky this doesnt work anymore
+	
+    var arias = document.querySelectorAll("[aria-describedby]"); // 240516 yky looking for phone-column
+	phones = []
+	
+	for (let aria of arias) 
+	{
+		descr = aria.getAttribute('aria-describedby')
+		if ( descr.indexOf("phone-column") >= 0) phones.push(aria)
+	}
+	
+	if ((document.URL == 'https://contacts.google.com/') & (phones.length == 0)) ykAlert("No Phone Columns detected", -1 )
+	
     for (let phone of phones)
     {
         let as = phone.getElementsByTagName('a');
