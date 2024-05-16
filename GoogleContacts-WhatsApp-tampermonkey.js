@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WhatsApp links in Google Contact phone numbers
 // @namespace    https://github.com/yoonkit/GoogleContactsWhatsApp
-// @version      0.5
+// @version      0.6
 // @description  Adding a WhatsApp icon to Google Contacts phone numbers for a quick chat
 // @author       Yoon-Kit Yong
 // @donate       PayPal some love to yoonkit@gmail.com [ https://www.paypal.com/paypalme/yoonkit ]
@@ -9,14 +9,12 @@
 // @match        https://contacts.google.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
 // @grant        none
-// @require      https://code.jquery.com/jquery-3.5.1.min.js#sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=
 // @run-at       document-idle
 // ==/UserScript==
 
 
-var $ = window.jQuery; // 230729 yky Watch out for Apple problems with jQuery
-var debug = -1; //230729 yky Set to -1 for production, 0 for debug
-
+// var $ = window.jQuery; // 230729 yky Watch out for Apple problems with jQuery
+// var debug = -1; //230729 yky Set to -1 for production, 0 for debug
 
 var verbosity = 3
 document.verbosity = verbosity
@@ -49,6 +47,7 @@ function ykAlert( msg, type )
     return 0;
 }
 
+ykAlert("WhatsApp links for Google Contacts loading", 2)
 
 // https://icons8.com/icon/ChMMcyjCQnEn/whatsapp
 // 230728 yky Small 16x16 icon for Whatsapp encoded inline. Detailed view is defaulted by css at 20x20 tho.
@@ -79,7 +78,7 @@ function generateWhatsApp( phonetext )
 
 
     let url = "http://wa.me/"+phone;
-    ykAlert(url);
+    ykAlert(url, 6);
 
     let link = document.createElement('a');
     link.href = url;
@@ -104,15 +103,15 @@ function getPhoneDetails()
      *         dot: "tZ08dd"
      * 230729 yky Fixed for Safari - the jQuery doesnt return all Elements.
      */
-    // var telsj = $("div.urwqv"); // 230729 yky Seems this doesnt work on Safari Mac and iPad. Need to use getElementsByClassName
+
     var telsj = document.getElementsByClassName("urwqv"); 
     ykAlert("Phone details found: " + telsj.length, 2 );
-    //document.telsj = telsj;
+
 
     for (let tel of telsj)
     {
         let as = tel.getElementsByTagName('a');
-        ykAlert( "as length: " + as.length, 4);
+        ykAlert( "as length: " + as.length, 6);
 
         if (as.length == 1)
         {
@@ -176,8 +175,6 @@ function getPhoneColumn()
     }
 }
 
-//waitForKeyElements (".xDRIr", getjTels, true);
-//waitForKeyElements (".urwqv", getTels);
 
 // 230728 yky Using setTimeout instead of waitForKeyElements.
 setInterval( function () { getPhoneDetails() }, 2000)
